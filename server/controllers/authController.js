@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
 
   const token = jwt.sign(
     {
-      id: user._id,
+      id: user._id,  //This is the data stored inside the token.When the token is decoded later, the server can know:1. Which user is making the request 2.User ID
     },
 
     process.env.JWT_SECRET,

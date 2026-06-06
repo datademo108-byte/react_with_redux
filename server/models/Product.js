@@ -9,10 +9,6 @@ const productSchema = mongoose.Schema(
     image: String,
 
     description: String,
-  },
-
-  {
-    timestamps: true,
   }
 );
 
