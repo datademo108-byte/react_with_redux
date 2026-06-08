@@ -1,4 +1,4 @@
-import product from "../models/Product.js"
+import Product from "../models/Product.js"
 
 // GET ALL PRODUCTS
 
@@ -31,7 +31,7 @@ export const createProduct = async (req, res) => {
     const {
       name,
       price,
-      image,
+      images,
       description,
     } = req.body;
 
@@ -41,7 +41,7 @@ export const createProduct = async (req, res) => {
 
       price,
 
-      image,
+      images,
 
       description,
 
@@ -85,8 +85,8 @@ export const updateProduct = async (req, res) => {
     product.price =
       req.body.price || product.price;
 
-    product.image =
-      req.body.image || product.image;
+    product.images =
+      req.body.images || product.images;
 
     product.description =
       req.body.description ||
@@ -141,4 +141,12 @@ export const deleteProduct = async (req, res) => {
 
   }
 
+};
+
+export const getProductById = async (req, res) => {
+  const product = await Product.findById(
+    req.params.id
+  );
+
+  res.json(product);
 };

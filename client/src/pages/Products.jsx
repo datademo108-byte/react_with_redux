@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setProducts } from "../features/products/productSlice";
@@ -14,11 +13,14 @@ function Products() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get(
+      const response = await fetch(
         "http://localhost:5000/api/products"
       );
 
+      const data = await response.json();
+
       dispatch(setProducts(data));
+
     } catch (error) {
       console.log(error);
     }
@@ -29,8 +31,8 @@ function Products() {
   }, []);
 
   const editProduct = (id) => {
-  navigate(`/product/edit/${id}`);
-};
+    navigate(`/product/edit/${id}`);
+  };
 
   const deleteProduct = async (id) => {
     const confirmDelete = window.confirm(
@@ -40,9 +42,16 @@ function Products() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(
-        `http://localhost:5000/api/products/${id}`
+      const response = await fetch(
+        `http://localhost:5000/api/products/${id}`,
+        {
+          method: "DELETE",
+        }
       );
+
+      if (!response.ok) {
+        throw new Error("Delete failed");
+      }
 
       fetchProducts();
 
@@ -68,12 +77,15 @@ function Products() {
           {products.map((product) => (
 
             <div
-              key={product._id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300"
-            >
+  key={product._id}
+  onClick={() =>
+    navigate(`/product/${product._id}`)
+  }
+  className="bg-white rounded-xl shadow-md cursor-pointer hover:shadow-xl"
+>
 
               <img
-                src={product.image}
+                src={product.images?.[0]}
                 alt={product.name}
                 className="w-full h-72 object-cover"
               />
